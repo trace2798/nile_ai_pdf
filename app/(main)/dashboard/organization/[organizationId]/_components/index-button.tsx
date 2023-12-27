@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 // import { File } from "@prisma/client";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { FC } from "react";
+import { FC, useState } from "react";
+import { set } from "react-hook-form";
 import { toast } from "sonner";
 
 // interface IndexButtonProps {
@@ -13,9 +14,11 @@ import { toast } from "sonner";
 
 const IndexButton = ({ file }: { file: any }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const onSubmit = async () => {
     try {
       //   const url = file.url;
+      setLoading(true);
       const response = await axios.post(`/api/index`, { file });
       // console.log(response);
       router.refresh();
@@ -40,7 +43,9 @@ const IndexButton = ({ file }: { file: any }) => {
       {file.isIndex ? (
         <h1>File successfully indexed</h1>
       ) : (
-        <Button onClick={onSubmit}>Embed File</Button>
+        <Button onClick={onSubmit} disabled={loading}>
+          {loading ? "Indexing..." : "Embed File"}
+        </Button>
       )}
     </>
   );

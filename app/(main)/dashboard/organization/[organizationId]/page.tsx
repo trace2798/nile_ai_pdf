@@ -33,7 +33,7 @@ const OrganizationIdPage = async ({
       <div className="px-2 md:px-4">
         <Suspense>
           <UploadButton />
-          {/* <BoardList organizationId={params.organizationId} /> */}
+          <BoardList organizationId={params.organizationId} />
         </Suspense>
       </div>
     </div>
