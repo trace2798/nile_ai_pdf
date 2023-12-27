@@ -27,6 +27,7 @@
     "@theniledev/react": "^1.0.0-alpha.194",
     "@uploadthing/react": "^6.0.2",
     "ai": "^2.2.30",
+    "axios": "^1.6.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
@@ -43,7 +44,8 @@
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^6.1.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@types/node": "^20",
