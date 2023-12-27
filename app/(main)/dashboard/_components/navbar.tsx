@@ -1,16 +1,11 @@
-import { Plus } from "lucide-react";
-
 import { Logo } from "@/components/logo";
-import { Button } from "@/components/ui/button";
-
-import { MobileSidebar } from "./mobile-sidebar";
+import { ModeToggle } from "@/components/mode-toggle";
 import UserAccountNav from "@/components/user-account-nav";
 import { configureNile } from "@/lib/AuthUtils";
-import { cookies } from "next/headers";
 import nile from "@/lib/NileServer";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-// import OrgSelector from "@/components/org-selector";
-import { ModeToggle } from "@/components/mode-toggle";
+import { MobileSidebar } from "./mobile-sidebar";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;

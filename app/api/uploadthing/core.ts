@@ -1,6 +1,7 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { TextLoader } from "langchain/document_loaders/fs/text";
 
 import nile from "@/lib/NileServer";
 import { configureNile } from "@/lib/AuthUtils";
@@ -64,7 +65,7 @@ const onUploadComplete = async ({
     console.log(response);
     const blob = await response.blob();
 
-    const loader = new PDFLoader(blob);
+    const loader = new PDFLoader(blob) || new TextLoader(blob);
 
     const pageLevelDocs = await loader.load();
 
@@ -73,12 +74,6 @@ const onUploadComplete = async ({
     // const { subscriptionPlan } = metadata;
     console.log("CHECKING PAGES");
     console.log(pagesAmt);
-    // Define the maximum pages for each subscription plan
-    const maxPages: Record<SubscriptionPlan, number> = {
-      FREE: 1,
-      PRO: 2,
-      ENTERPRISE: 5,
-    };
 
     // Check if the pages amount exceeds the limit for the subscription plan
     // const isPageLimitExceeded =
@@ -118,10 +113,14 @@ const onUploadComplete = async ({
 };
 
 export const ourFileRouter = {
-  freePlanUploader: f({ pdf: { maxFileSize: "4MB" } })
+  freePlanUploader: f({
+    pdf: { maxFileSize: "4MB" },
+  })
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
-  proPlanUploader: f({ pdf: { maxFileSize: "16MB" } })
+  proPlanUploader: f({
+    pdf: { maxFileSize: "16MB" },
+  })
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
 } satisfies FileRouter;

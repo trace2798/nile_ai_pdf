@@ -1,0 +1,15 @@
+CREATE TABLE "file" (
+  "id" UUID DEFAULT (gen_random_uuid()),
+  "tenant_id" UUID NOT NULL,
+  "url"      TEXT,
+  "key"      TEXT,
+  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "user_id" UUID NOT NULL,
+  "user_picture" TEXT,
+  "user_name" TEXT,
+  "isIndex" Boolean,
+  "name" TEXT,
+  "pageAmt" INTEGER,
+   CONSTRAINT "file_pkey" PRIMARY KEY ("id", "tenant_id")
+);
