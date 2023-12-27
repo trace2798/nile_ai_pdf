@@ -32,6 +32,29 @@ const page: FC<pageProps> = async ({}) => {
   const countResult = (await getAvailableTenantCount()) as { count: string }[];
   const count = Number(countResult[0].count);
   console.log(count);
+  if (count === 0) {
+    console.log("Logic to create tenant should come here");
+    const createTenantResponse = await nile.api.tenants.createTenant({
+      name: "workspace",
+    });
+    const tenant = await createTenantResponse.json();
+    const tenantID = tenant.id;
+    console.log("created tenant with tenantID: ", tenantID);
+    const userInfo = await nile.db("users.users").where({
+      id: nile.userId,
+    });
+    console.log(userInfo);
+    await nile
+      .db("users.tenant_users")
+      .where({
+        tenant_id: tenantID,
+        user_id: nile.userId,
+      })
+      .update({
+        email: userInfo[0].email,
+        roles: ["owner"],
+      });
+  }
 
   return (
     <>

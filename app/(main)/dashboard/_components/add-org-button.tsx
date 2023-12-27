@@ -22,7 +22,9 @@ const AddOrgButton: FC<AddOrgButtonProps> = ({ count }) => {
           <Button onClick={orgs.onOpen} disabled>
             Create Workspace
           </Button>
-          <h1 className="mt-5 text-sm">You can create upto 1 Organization</h1>
+          <h1 className="mt-5 text-sm">
+            You can create upto 1 workspace with the free plan
+          </h1>
         </>
       )}
     </>
