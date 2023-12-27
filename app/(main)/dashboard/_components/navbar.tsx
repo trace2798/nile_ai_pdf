@@ -79,7 +79,7 @@ export const Navbar = async () => {
           }}
         /> */}
         {/* <OrgSelector orgs={tenants} /> */}
-        <a href="/dashboard/organization">Dashboard</a>
+        <a href="/dashboard">Dashboard</a>
         <ModeToggle />
         <UserAccountNav email={email} imageUrl={picture} name={name} />
       </div>
