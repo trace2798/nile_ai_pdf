@@ -13,6 +13,11 @@ import { getAvailableTenantCount } from "@/lib/tenant-limit";
 
 interface pageProps {}
 
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
+
 const page: FC<pageProps> = async ({}) => {
   configureNile(cookies().get("authData"), null);
   console.log("showing tenants page for user: " + nile.userId);

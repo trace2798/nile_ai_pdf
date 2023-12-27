@@ -8,6 +8,11 @@ import { cn } from "@/lib/utils";
 import { cookies } from "next/headers";
 // import Image from "next/image";
 
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
+
 const MarketingPage = () => {
   configureNile(cookies().get("authData"), null);
   console.log("showing tenants page for user: " + nile.userId);
