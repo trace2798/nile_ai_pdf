@@ -22,7 +22,7 @@ const page: FC<pageProps> = async ({}) => {
   configureNile(cookies().get("authData"), null);
   console.log("showing tenants page for user: " + nile.userId);
   if (!nile.userId) {
-    redirect("/");
+    redirect("/login");
   }
   let tenants: any = [];
   if (nile.userId) {
