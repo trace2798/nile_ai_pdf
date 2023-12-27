@@ -1,11 +1,11 @@
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
-// import AuthCookieData, { NileJWTPayload } from "@/app/model/AuthCookieData";
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import AuthCookieData, { NileJWTPayload } from "@/lib/AuthUtils";
 
 export async function POST(req: Request) {
   const formData = await req.formData();
+  console.log(formData);
   const event = formData.get("event");
 
   let location: string;
@@ -52,7 +52,7 @@ function redirectOnSuccess(formData: FormData): string {
       JSON.stringify(cookieData),
       buildCookieOptions(3600)
     );
-
+    
     return "/dashboard";
   } catch (e) {
     return redirectOnError((e as Error).message);
