@@ -17,7 +17,6 @@ import ReactMarkdown from "react-markdown";
 import { MemoizedReactMarkdown } from "./markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
-import { CodeBlock } from "@/components/ui/codeblock";
 
 type Message = {
   id: string;
