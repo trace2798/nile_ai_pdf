@@ -6,6 +6,8 @@ import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { NextRequest, NextResponse } from "next/server";
 
+export const maxDuration = 30;
+
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
