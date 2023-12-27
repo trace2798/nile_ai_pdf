@@ -6,7 +6,7 @@ import { configureNile } from "@/lib/AuthUtils";
 import nile from "@/lib/NileServer";
 import { cn } from "@/lib/utils";
 import { cookies } from "next/headers";
-import Image from "next/image";
+// import Image from "next/image";
 
 const MarketingPage = () => {
   configureNile(cookies().get("authData"), null);
@@ -35,7 +35,7 @@ const MarketingPage = () => {
         </Button>
       ) : (
         <Button size="sm" asChild className="mt-5">
-          <Link href="/sign-up">Get Taskify for free</Link>
+          <Link href="/sign-up">Get Chatty for free</Link>
         </Button>
       )}
     </div>
