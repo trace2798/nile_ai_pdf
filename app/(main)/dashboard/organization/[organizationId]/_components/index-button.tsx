@@ -19,7 +19,7 @@ const IndexButton = ({ file }: { file: any }) => {
     try {
       //   const url = file.url;
       setLoading(true);
-      const response = await axios.post(`/api/index`, { file });
+      const response = await axios.post("/api/index", { file });
       // console.log(response);
       router.refresh();
       toast.success("Successfully Index");
@@ -28,6 +28,7 @@ const IndexButton = ({ file }: { file: any }) => {
       //     description: "File successfully indexed",
       //   });
     } catch (error) {
+      console.log(error);
       if (error instanceof AxiosError) {
         if (error.response?.status === 403) {
           return toast.error("Out of credits");
