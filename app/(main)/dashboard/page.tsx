@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import AddOrgButton from "./_components/add-org-button";
 import Link from "next/link";
 import { getAvailableTenantCount } from "@/lib/tenant-limit";
+import { Navbar } from "@/app/(marketing)/_components/navbar";
 
 interface pageProps {}
 
@@ -63,6 +64,7 @@ const page: FC<pageProps> = async ({}) => {
 
   return (
     <>
+      <Navbar />
       {/* <div className="mt-24">Select Org or Create org logic will come here</div> */}
       <div className="ml-[5vw] flex flex-col justify-center items-center mt-24">
         <Card className="max-w-sm p-3 flex flex-col items-center justify-center">
