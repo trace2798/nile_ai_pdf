@@ -57,7 +57,10 @@ export const Navbar = async () => {
           )} */}
 
           {/* {nile.userId ? ( */}
-          <UserAccountNav email={email} imageUrl={picture} name={name} />
+          <Button size="sm" variant="outline" asChild>
+            <Link href="/login">Login</Link>
+          </Button>
+          {/* <UserAccountNav email={email} imageUrl={picture} name={name} /> */}
           {/* ) : (
             ""
           )} */}
