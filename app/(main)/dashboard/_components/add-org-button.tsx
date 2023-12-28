@@ -14,7 +14,13 @@ const AddOrgButton: FC<AddOrgButtonProps> = ({ count }) => {
     <>
       {count < MAX_FREE_TENANTS ? (
         <>
-          <Button onClick={orgs.onOpen}>Create Workspace</Button>
+          <Button onClick={orgs.onOpen} disabled>
+            Create Workspace
+          </Button>
+          <h1 className="mt-5 text-sm">
+            Your free workspace is getting created. Refresh this page if you see
+            this message.
+          </h1>
         </>
       ) : (
         <>
