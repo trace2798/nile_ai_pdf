@@ -38,15 +38,7 @@ export async function POST(req: NextRequest) {
           console.log(`Total chunks: ${chunks.length}`);
           console.log("EMBED CALL HERE");
           const modelName = "thenlper/gte-large";
-          //   const azureOpenAIBasePath = "https://api.endpoints.anyscale.com/v1";
 
-          //   const embeddingsArrays = await new OpenAIEmbeddings({
-          //     modelName: "thenlper/gte-large",
-          //     azureOpenAIBasePath: "https://api.endpoints.anyscale.com/v1",
-          //     openAIApiKey: process.env.ANYSCALE_API_KEY,
-          //   }).embedDocuments(
-          //     chunks.map((chunk) => chunk.pageContent.replace(/\n/g, " "))
-          //   );
           const embeddingsArrays = await new OpenAIEmbeddings({
             configuration: {
               baseURL: "https://api.endpoints.anyscale.com/v1",
@@ -78,10 +70,7 @@ export async function POST(req: NextRequest) {
             if (batch.length === batchSize || idx === chunks.length - 1) {
               console.log(batch);
               console.log(batch[0].values);
-              //change this to your COMMAND_TO_UPSERT_TO_PINECONE
-              //   await pineconeIndex.upsert(batch);
-              // console.log("Upserting Vector");
-              // Empty the batch
+
               for (const vector of batch) {
                 const uuid = vector.id.split("_")[0];
                 await nile.db("file_embedding").insert({
@@ -105,19 +94,10 @@ export async function POST(req: NextRequest) {
               tenant_id: data.file.tenant_id,
             })
             .update({ isIndex: true });
-          //   await db.file.update({
-          //     data: {
-          //       indexStatus: true,
-          //       totalChunks: chunks.length,
-          //     },
-          //     where: {
-          //       id: data.file.id,
-          //     },
-          //   });
         }
       } catch (err) {
-        console.log("error: Error in upserting in pinecone ", err);
-        return new NextResponse("Error in upserting in pinecone", {
+        console.log("error: Error in upserting to database ", err);
+        return new NextResponse("Error in upserting to database", {
           status: 400,
         });
       }
