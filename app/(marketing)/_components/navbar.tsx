@@ -47,9 +47,9 @@ export const Navbar = async () => {
         <div className="space-x-4 w-[200px] max-w-[210px] flex items-center justify-between md:w-full">
           <ModeToggle />
           {/* {nile.userId ? ( */}
-          <Button variant={"ghost"} size="sm" asChild>
+          {/* <Button variant={"ghost"} size="sm" asChild>
             <Link href="/dashboard">Dashboard</Link>
-          </Button>
+          </Button> */}
           {/* ) : (
             <Button size="sm" variant="outline" asChild>
               <Link href="/login">Login</Link>
