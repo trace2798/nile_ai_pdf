@@ -8,6 +8,9 @@ import { configureNile } from "@/lib/AuthUtils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { OrganizationModal } from "@/components/modals/orgs-modal";
+import { NextResponse } from "next/server";
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 // import { usePathname } from "next/navigation";
 
 type SubscriptionPlan = "FREE" | "PRO" | "ENTERPRISE";
@@ -95,6 +98,85 @@ const onUploadComplete = async ({
 
       console.log("2: File created");
       console.log(createdFile);
+      const fileId = await nile.db("file").where({
+        key: file.key,
+        tenant_id: metadata.orgId,
+      });
+      console.log(fileId);
+      try {
+        for (const doc of pageLevelDocs) {
+          console.log(doc);
+          const txtPath = doc.metadata.loc.pageNumber;
+          const text = doc.pageContent;
+          console.log(text);
+          const textSplitter = new RecursiveCharacterTextSplitter({
+            chunkSize: 1000,
+          });
+          //Split text into chunks (documents)
+          const chunks = await textSplitter.createDocuments([text]);
+          console.log(`Total chunks: ${chunks.length}`);
+          console.log("EMBED CALL HERE");
+          const modelName = "thenlper/gte-large";
+          const embeddingsArrays = await new OpenAIEmbeddings({
+            configuration: {
+              baseURL: "https://api.endpoints.anyscale.com/v1",
+            },
+            modelName: modelName,
+          }).embedDocuments(
+            chunks.map((chunk) => chunk.pageContent.replace(/\n/g, " "))
+          );
+          console.log(embeddingsArrays);
+          const batchSize = 100;
+          let batch: any = [];
+          for (let idx = 0; idx < chunks.length; idx++) {
+            const chunk = chunks[idx];
+            console.log(chunk);
+            const vector = {
+              id: `${fileId[0].id}_${idx}`,
+              values: embeddingsArrays[idx],
+              metadata: {
+                ...chunk.metadata,
+                loc: JSON.stringify(chunk.metadata.loc),
+                pageContent: chunk.pageContent,
+                txtPath: txtPath,
+                filter: `${fileId[0].id}`,
+              },
+            };
+            console.log(vector);
+
+            batch = [...batch, vector];
+            if (batch.length === batchSize || idx === chunks.length - 1) {
+              console.log(batch);
+              console.log(batch[0].values);
+
+              for (const vector of batch) {
+                const uuid = vector.id.split("_")[0];
+                await nile.db("file_embedding").insert({
+                  file_id: fileId[0].id,
+                  tenant_id: metadata.orgId,
+                  embedding_api_id: uuid,
+                  embedding: JSON.stringify(vector.values),
+                  pageContent: JSON.stringify(vector.metadata.pageContent),
+                  location: JSON.stringify(vector.metadata.loc),
+                });
+              }
+              batch = [];
+            }
+          }
+          //   Log the number of vectors updated just for verification purpose
+          console.log(`Database index updated with ${chunks.length} vectors`);
+          await nile
+            .db("file")
+            .where({
+              id: fileId[0].id,
+              tenant_id: metadata.orgId,
+            })
+            .update({ isIndex: true });
+        }
+      } catch (err) {
+        console.log("error: Error in upserting to database ", err);
+        return "LIMITEXCEED";
+      }
       return "SUCCESS";
     } else {
       return "LIMITEXCEED";
@@ -109,6 +191,7 @@ const onUploadComplete = async ({
     //   },
     // });
     console.log(err);
+    return "LIMITEXCEED";
   }
 };
 

@@ -7,11 +7,11 @@ import { redirect } from "next/navigation";
 import { Toaster } from "sonner";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  configureNile(cookies().get("authData"), nile.userId);
-  console.log("showing tenants page for user: " + nile.userId);
-  if (!nile.userId) {
-    redirect("/login");
-  }
+  // configureNile(cookies().get("authData"), nile.userId);
+  // console.log("showing tenants page for user: " + nile.userId);
+  // if (!nile.userId) {
+  //   redirect("/login");
+  // }
   return (
     <QueryProvider>
       <main>
