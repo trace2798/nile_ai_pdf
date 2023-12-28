@@ -57,7 +57,7 @@ const onUploadComplete = async ({
     // });
 
     // if (isFileExist) return;
-    console.log("1");
+    console.log("1: Uploadthings api");
 
     const response = await fetch(
       `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`

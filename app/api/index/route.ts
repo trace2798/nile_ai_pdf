@@ -6,14 +6,16 @@ import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { NextRequest, NextResponse } from "next/server";
 
-export const maxDuration = 30;
+// export const maxDuration = 30;
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
     console.log(data, "DATA");
+    console.log("1: Index api");
     try {
       const response = await fetch(`${data.file.url}`);
+      console.log("2: Index api");
       console.log(response);
       const blob = await response.blob();
       console.log(blob, "BLOB");
@@ -23,7 +25,6 @@ export async function POST(req: NextRequest) {
       console.log(pageLevelDocs);
       const pagesAmt = pageLevelDocs.length;
       console.log(pagesAmt);
-
       try {
         for (const doc of pageLevelDocs) {
           console.log(doc);
@@ -38,7 +39,6 @@ export async function POST(req: NextRequest) {
           console.log(`Total chunks: ${chunks.length}`);
           console.log("EMBED CALL HERE");
           const modelName = "thenlper/gte-large";
-
           const embeddingsArrays = await new OpenAIEmbeddings({
             configuration: {
               baseURL: "https://api.endpoints.anyscale.com/v1",
