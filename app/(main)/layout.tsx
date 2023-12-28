@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Toaster } from "sonner";
 
-const PlatformLayout = ({ children }: { children: React.ReactNode }) => {
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
   configureNile(cookies().get("authData"), null);
   console.log("showing tenants page for user: " + nile.userId);
   if (!nile.userId) {
@@ -23,4 +23,4 @@ const PlatformLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default PlatformLayout;
+export default MainLayout;
