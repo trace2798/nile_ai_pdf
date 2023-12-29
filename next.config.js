@@ -13,11 +13,13 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config) => {
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // nextjs does not play nice with knex, which @theniledev/server uses under the hood
     config.externals.push({
       knex: "commonjs knex",
     });
+    config.resolve.alias.canvas = false;
+    config.resolve.alias.encoding = false;
     return config;
   },
 };

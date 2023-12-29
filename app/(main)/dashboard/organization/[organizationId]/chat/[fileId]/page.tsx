@@ -35,6 +35,15 @@ const FileIdPage = async ({ params }: FileIdPageProps) => {
     })
     .select();
 
+  const fileInfo = await nile
+    .db("file")
+    .where({
+      id: params.fileId,
+      // user_id: nile.userId,
+      tenant_id: number,
+    })
+    .returning("*")
+  console.log(fileInfo);
   return (
     <>
       <Chat
@@ -42,6 +51,7 @@ const FileIdPage = async ({ params }: FileIdPageProps) => {
         pastMessages={messages}
         userId={nile.userId}
         tenant_id={number}
+        url={fileInfo[0].url}
       />
     </>
   );
