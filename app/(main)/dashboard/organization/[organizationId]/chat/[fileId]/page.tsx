@@ -42,17 +42,19 @@ const FileIdPage = async ({ params }: FileIdPageProps) => {
       // user_id: nile.userId,
       tenant_id: number,
     })
-    .returning("*")
+    .returning("*");
   console.log(fileInfo);
   return (
     <>
-      <Chat
-        fileId={params.fileId}
-        pastMessages={messages}
-        userId={nile.userId}
-        tenant_id={number}
-        url={fileInfo[0].url}
-      />
+      <div className="max-h-[88vh] overflow-hidden">
+        <Chat
+          fileId={params.fileId}
+          pastMessages={messages}
+          userId={nile.userId}
+          tenant_id={number}
+          url={fileInfo[0].url}
+        />
+      </div>
     </>
   );
 };

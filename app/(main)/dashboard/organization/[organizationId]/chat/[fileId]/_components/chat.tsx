@@ -23,6 +23,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import PdfRenderer from "@/components/pdf-renderer";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 type Message = {
   id: string;
@@ -87,73 +88,77 @@ export const Chat: FC<ChatProps> = ({
   console.log(pastMessages);
   return (
     <>
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={50}>
+      <ResizablePanelGroup direction="horizontal" className="w-full">
+        <ResizablePanel className="w-[50vw] max-h-[85vh]">
           <PdfRenderer url={url} />{" "}
         </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel className="pl-5">
-          {pastMessages.length > 0 ? (
-            <>
-              {pastMessages.map((message, index) => (
-                <div key={index}>
-                  {message.isUserMessage ? (
-                    <UserMessage text={message.text} />
-                  ) : (
-                    <AIMessage text={message.text} />
-                  )}
-                </div>
-              ))}
-            </>
-          ) : (
-            ""
-          )}
-          {messages.map((m) => (
-            <div
-              key={m.id}
-              className={cn("whitespace-pre-wrap group", {
-                "text-blue-500 text-right p-4  gap-x-8 rounded-lg max-w-lg ":
-                  m.role === "user",
-                "text-green-500 p-4 w-full flex items-start gap-x-8 rounded-lg max-w-lg bg-muted":
-                  m.role !== "user",
-                "prose-p:text-indigo-400 prose-li:text-indigo-400":
-                  m.role === "user",
-              })}
-            >
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm, remarkMath]}
-                className="text-base prose dark:prose-invert prose-ul:m-0 prose-li:m-0 prose-p:my-0 prose-h3:my-0"
-              >
-                {m.content}
-              </ReactMarkdown>
-              <Button
-                onClick={() => onCopy(m.content)}
-                className="hidden group-hover:block"
-                size="icon"
-                variant="ghost"
-              >
-                <Copy className="w-4 h-4" />
-              </Button>
-            </div>
-          ))}
-
-          <form onSubmit={handleSubmit}>
-            {isLoading && (
-              <div className="p-4 rounded-lg w-1/2 flex items-center justify-center bg-muted mt-10">
-                <BeatLoader
-                  color={theme === "light" ? "black" : "white"}
-                  size={5}
-                />
-              </div>
+        <ResizableHandle className="mx-5" withHandle />
+        <ResizablePanel className="overflow-x-hidden last:mb-12">
+          <ScrollArea className="h-[77vh] overflow-x-hidden overflow-auto w-full">
+            <ScrollBar orientation="vertical" forceMount/>
+            {pastMessages.length > 0 ? (
+              <>
+                {pastMessages.map((message, index) => (
+                  <ScrollArea key={index} className="max-h-screen">
+                    {message.isUserMessage ? (
+                      <UserMessage text={message.text} />
+                    ) : (
+                      <AIMessage text={message.text} />
+                    )}
+                    <ScrollBar orientation="horizontal" />
+                  </ScrollArea>
+                ))}
+              </>
+            ) : (
+              ""
             )}
-            <Input
-              className="fixed bottom-0 w-[80vw] md:w-full max-w-md p-2 mb-8 min-h-4 border border-gray-300 rounded shadow-xl"
-              value={input}
-              placeholder="Talk to the document..."
-              onChange={handleInputChange}
-            />
-            <div ref={scrollRef} />
-          </form>
+            {messages.map((m) => (
+              <div
+                key={m.id}
+                className={cn("whitespace-pre-wrap group", {
+                  "text-blue-500 text-right p-4  gap-x-8 rounded-lg max-w-lg ":
+                    m.role === "user",
+                  "text-green-500 p-4 w-full flex items-start gap-x-8 rounded-lg max-w-lg bg-muted":
+                    m.role !== "user",
+                  "prose-p:text-indigo-400 prose-li:text-indigo-400":
+                    m.role === "user",
+                })}
+              >
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm, remarkMath]}
+                  className="text-base prose dark:prose-invert prose-ul:m-0 prose-li:m-0 prose-p:my-0 prose-h3:my-0"
+                >
+                  {m.content}
+                </ReactMarkdown>
+                <Button
+                  onClick={() => onCopy(m.content)}
+                  className="hidden group-hover:block"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+            ))}
+            {/* <div className="bg-white">Soem</div> */}
+            <form onSubmit={handleSubmit}>
+              {isLoading && (
+                <div className="p-4 rounded-lg w-1/2 flex items-center justify-center bg-muted mt-10">
+                  <BeatLoader
+                    color={theme === "light" ? "black" : "white"}
+                    size={5}
+                  />
+                </div>
+              )}
+              <div ref={scrollRef} />
+              <Input
+                className="fixed bottom-0 w-[80vw] md:w-full max-w-md p-2 mb-8 min-h-4 border border-gray-300 rounded shadow-xl"
+                value={input}
+                placeholder="Talk to the document..."
+                onChange={handleInputChange}
+              />
+            </form>
+          </ScrollArea>
         </ResizablePanel>
       </ResizablePanelGroup>
       {/* <div className="flex flex-col w-full max-w-xl pb-24 mx-auto stretch min-h-screen"></div> */}
