@@ -5,7 +5,7 @@ import { Expand, Loader2 } from "lucide-react";
 import SimpleBar from "simplebar-react";
 import { Document, Page } from "react-pdf";
 
-// import { useResizeDetector } from "react-resize-detector";
+import { useResizeDetector } from "react-resize-detector";
 import { toast } from "sonner";
 
 interface PdfFullscreenProps {
@@ -16,7 +16,7 @@ const PdfFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [numPages, setNumPages] = useState<number>();
 
-//   const { width, ref } = useResizeDetector();
+  const { width, ref } = useResizeDetector();
 
   return (
     <Dialog
