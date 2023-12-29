@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       let result;
       if (prevMessages.length < 6) {
         result = await anyscale.chat.completions.create({
-          model: "meta-llama/Llama-2-70b-chat-hf",
+          model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
           temperature: 0.1,
           stream: true,
           messages: [

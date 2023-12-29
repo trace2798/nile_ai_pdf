@@ -393,6 +393,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
                 className={cn(isLoading ? 'hidden' : '')}
                 width={width ? width : 1}
                 pageNumber={currPage}
+                renderMode={'canvas'}
                 scale={scale}
                 rotate={rotation}
                 key={'@' + scale}

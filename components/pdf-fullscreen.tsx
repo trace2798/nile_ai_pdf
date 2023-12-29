@@ -34,7 +34,7 @@ const PdfFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
       </DialogTrigger>
       <DialogContent className="max-w-7xl w-full">
         <SimpleBar autoHide={false} className="max-h-[calc(100vh-10rem)] mt-6">
-          <div>
+          <div ref={ref}>
             <Document
               loading={
                 <div className="flex justify-center">
@@ -49,7 +49,7 @@ const PdfFullscreen = ({ fileUrl }: PdfFullscreenProps) => {
               className="max-h-full"
             >
               {new Array(numPages).fill(0).map((_, i) => (
-                <Page key={i}  pageNumber={i + 1} />
+                <Page key={i} width={width ? width : 1} pageNumber={i + 1} />
               ))}
             </Document>
           </div>
