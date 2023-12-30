@@ -1,30 +1,28 @@
 "use client";
-import { FC, useState } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Cloud, File, Loader2, UploadCloud } from "lucide-react";
+import { Cloud, File, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { FC, useState } from "react";
 
 import { useUploadThing } from "@/lib/uploadthing";
 import Dropzone from "react-dropzone";
-import { Progress } from "./ui/progress";
 import { toast } from "sonner";
+import { Progress } from "./ui/progress";
+import { MAX_UPLOAD_LIMIT } from "@/constants/uploads";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Button } from "./ui/button";
 
-interface UploadButtonProps {}
+interface UploadButtonProps {
+  count: number;
+}
 
 const UploadDropzone = ({}) => {
   const router = useRouter();
-
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploadSuceess, setIsUploadSuceess] = useState<boolean>(false);
@@ -68,11 +66,6 @@ const UploadDropzone = ({}) => {
 
         if (!res) {
           return toast.error("Something went wrong");
-          // return toast({
-          //   title: "Something went wrong",
-          //   description: "Please try again later",
-          //   variant: "destructive",
-          // });
         }
 
         const [fileResponse] = res;
@@ -81,19 +74,10 @@ const UploadDropzone = ({}) => {
 
         if (!key) {
           return toast.error("Something went wrong. Key Missing");
-          // toast({
-          //   title: "Something went wrong",
-          //   description: "Please try again later",
-          //   variant: "destructive",
-          // });
         }
 
         clearInterval(progressInterval);
         setUploadProgress(100);
-        // toast({
-        //   title: "Upload successful!",
-        //   description: "Your file has been uploaded successfully.",
-        // });
         toast.success("Upload successful!");
         setIsUploadSuceess(true);
       }}
@@ -164,29 +148,27 @@ const UploadDropzone = ({}) => {
   );
 };
 
-const UploadButton: FC<UploadButtonProps> = ({}) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
+const UploadButton: FC<UploadButtonProps> = ({ count }) => {
   return (
     <>
-      {/* <div className="max-w-sm">
-      </div> */}
-      <UploadDropzone />
-      {/* <Dialog
-        open={isOpen}
-        onOpenChange={(v) => {
-          if (!v) {
-            setIsOpen(v);
-          }
-        }}
-      >
-        <DialogTrigger onClick={() => setIsOpen(true)} asChild>
-          <UploadCloud className="h-5 w-5" />
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <UploadDropzone />
-        </DialogContent>
-      </Dialog> */}
+      {count < MAX_UPLOAD_LIMIT ? (
+        <UploadDropzone />
+      ) : (
+        <>
+          <Card className="mb-5">
+            {" "}
+            <CardHeader>
+              <CardTitle>Limit Crossed For Free Plan</CardTitle>
+            </CardHeader>
+            <CardContent className="">
+              Upgrade to Pro Plan to upload more.
+            </CardContent>
+            <CardFooter>
+              <Button>Upgrade</Button>
+            </CardFooter>
+          </Card>
+        </>
+      )}
     </>
   );
 };

@@ -26,13 +26,23 @@ const OrganizationIdPage = async ({
   console.log(resp);
   const tenant = await resp.json();
   console.log(tenant);
+  const currentFileCount = (await nile
+    .db("file")
+    .where({
+      user_id: nile.userId,
+      tenant_id: params.organizationId,
+    })
+    .count()) as { count: string }[];
+
+  console.log(currentFileCount);
+
   return (
     <div className="w-full mb-20">
       <Info name={tenant.name} />
       <Separator className="my-4" />
       <div className="px-2 md:px-4">
         <Suspense>
-          <UploadButton />
+          <UploadButton count={Number(currentFileCount[0].count)} />
           <BoardList organizationId={params.organizationId} />
         </Suspense>
       </div>
