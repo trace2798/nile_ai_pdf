@@ -161,7 +161,7 @@ const UploadButton: FC<UploadButtonProps> = ({ count }) => {
               <CardTitle>Limit Crossed For Free Plan</CardTitle>
             </CardHeader>
             <CardContent className="">
-              Upgrade to Pro Plan to upload more.
+              Upgrade to Pro Plan to upload more files.
             </CardContent>
             <CardFooter>
               <Button>Upgrade</Button>

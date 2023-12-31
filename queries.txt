@@ -1,18 +1,3 @@
-CREATE TABLE "file" (
-  "id" UUID DEFAULT (gen_random_uuid()),
-  "tenant_id" UUID NOT NULL,
-  "url"      TEXT,
-  "key"      TEXT UNIQUE,
-  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "user_id" UUID NOT NULL,
-  "user_picture" TEXT,
-  "user_name" TEXT,
-  "isIndex" Boolean,
-  "name" TEXT,
-  "pageAmt" INTEGER,
-   CONSTRAINT "file_pkey" PRIMARY KEY ("id", "tenant_id")
-);
 
 CREATE TABLE "file" (
   "id" UUID DEFAULT (gen_random_uuid()),
@@ -59,4 +44,19 @@ CREATE TABLE "message" (
   "fileId" UUID,
   CONSTRAINT "message_pkey" PRIMARY KEY ("id", "tenant_id"),
   CONSTRAINT "message_fileId_fkey" FOREIGN KEY ("fileId", "tenant_id") REFERENCES "file" ("id", "tenant_id")
+);
+
+//Not added this. Need confirmation
+CREATE TABLE "user_subscription" (
+  "id" UUID DEFAULT (gen_random_uuid()),
+  "user_id" UUID NOT NULL,
+  "tenant_id" UUID NOT NULL,
+  "stripe_customer_id" TEXT UNIQUE,
+  "stripe_subscription_id" TEXT UNIQUE,
+  "stripe_price_id" TEXT,
+  "stripe_current_period_end" TIMESTAMP,
+  CONSTRAINT "subscription_pkey" PRIMARY KEY ("id", "tenant_id"),
+  CONSTRAINT "user_subscription_user_id_fkey" FOREIGN KEY ("user_id", "tenant_id") REFERENCES "users"."tenant_users" ("user_id", "tenant_id"),
+  CONSTRAINT "unique_stripe_customer_id" UNIQUE ("stripe_customer_id", "tenant_id"),
+  CONSTRAINT "unique_stripe_subscription_id" UNIQUE ("stripe_subscription_id", "tenant_id")
 );
