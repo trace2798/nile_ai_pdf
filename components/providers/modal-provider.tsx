@@ -20,10 +20,8 @@ export const ModalProvider = () => {
 
   return (
     <>
-  <OrganizationModal />
-
-      {/*     <CardModal />*/}
-      <ProModal /> 
+      <OrganizationModal />
+      <ProModal />
     </>
   );
 };
