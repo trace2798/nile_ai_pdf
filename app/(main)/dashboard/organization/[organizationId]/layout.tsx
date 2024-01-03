@@ -10,7 +10,9 @@ const OrganizationIdLayout = ({ children }: { children: React.ReactNode }) => {
           {/* <div className="w-64 shrink-0 hidden md:block">
           <Sidebar />
         </div> */}
-          <Sidebar />
+          <div className="max-w-sm flex flex-row space-x-4">
+            <Sidebar />
+          </div>
           {children}
         </div>
       </main>

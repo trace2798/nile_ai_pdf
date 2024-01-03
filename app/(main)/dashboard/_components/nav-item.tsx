@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  Layout
-} from "lucide-react";
+import { Layout, Settings } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
@@ -34,6 +32,11 @@ NavItemProps) => {
       icon: <Layout className="h-4 w-4 mr-2" />,
       href: `/dashboard/organization/${organizationId}`,
     },
+    {
+      label: "Settings",
+      icon: <Settings className="h-4 w-4 mr-2" />,
+      href: `/dashboard/organization/${organizationId}/settings`,
+    },
   ];
 
   const onClick = (href: string) => {
@@ -42,7 +45,6 @@ NavItemProps) => {
 
   return (
     <>
-    
       {routes.map((route) => (
         <Button
           key={route.href}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { ProModal } from "@/components/modals/pro-modal";
+import { ProModal } from "@/components/modals/pro-modal";
 import { OrganizationModal } from "../modals/orgs-modal";
 import { ConfirmModal } from "../modals/confirm-modal";
 // import { CardModal } from "../modals/card-modal";
@@ -22,8 +22,8 @@ export const ModalProvider = () => {
     <>
   <OrganizationModal />
 
-      {/*     <CardModal />
-      <ProModal /> */}
+      {/*     <CardModal />*/}
+      <ProModal /> 
     </>
   );
 };

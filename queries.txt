@@ -56,7 +56,7 @@ CREATE TABLE "user_subscription" (
   "stripe_price_id" TEXT,
   "stripe_current_period_end" TIMESTAMP,
   CONSTRAINT "subscription_pkey" PRIMARY KEY ("id", "tenant_id"),
-  CONSTRAINT "user_subscription_user_id_fkey" FOREIGN KEY ("user_id", "tenant_id") REFERENCES "users"."tenant_users" ("user_id", "tenant_id"),
+  CONSTRAINT "user_subscription_user_id_fkey" FOREIGN KEY ("user_id", "tenant_id") REFERENCES "tenants" ("user_id", "id"),
   CONSTRAINT "unique_stripe_customer_id" UNIQUE ("stripe_customer_id", "tenant_id"),
   CONSTRAINT "unique_stripe_subscription_id" UNIQUE ("stripe_subscription_id", "tenant_id")
 );
