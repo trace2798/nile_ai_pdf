@@ -39,7 +39,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  const settingsUrl = absoluteUrl(`/organization/${orgId}`);
+  const settingsUrl = absoluteUrl(`/dashboard/organization/${orgId}`);
 
   let url = "";
 
@@ -95,7 +95,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  revalidatePath(`/organization/${orgId}`);
+  revalidatePath(`/dashboard/organization/${orgId}`);
+  console.log("url: ", url);
   return { data: url };
 };
 

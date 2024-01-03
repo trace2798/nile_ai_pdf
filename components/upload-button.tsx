@@ -16,9 +16,11 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Button } from "./ui/button";
+import { SubscriptionButton } from "@/app/(main)/dashboard/organization/[organizationId]/settings/_components/subscription_button";
 
 interface UploadButtonProps {
   count: number;
+  isPro: boolean;
 }
 
 const UploadDropzone = ({}) => {
@@ -148,7 +150,7 @@ const UploadDropzone = ({}) => {
   );
 };
 
-const UploadButton: FC<UploadButtonProps> = ({ count }) => {
+const UploadButton: FC<UploadButtonProps> = ({ count, isPro }) => {
   return (
     <>
       {count < MAX_UPLOAD_LIMIT ? (
@@ -164,7 +166,8 @@ const UploadButton: FC<UploadButtonProps> = ({ count }) => {
               Upgrade to Pro Plan to upload more files.
             </CardContent>
             <CardFooter>
-              <Button>Upgrade</Button>
+              {/* <Button>Upgrade</Button> */}
+              <SubscriptionButton isPro={isPro} />
             </CardFooter>
           </Card>
         </>

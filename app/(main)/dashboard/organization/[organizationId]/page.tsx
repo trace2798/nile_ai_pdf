@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { Info } from "./_components/info";
 import { BoardList } from "./_components/board-list";
 import UploadButton from "@/components/upload-button";
+import { checkSubscription } from "@/lib/subscription";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -35,6 +36,7 @@ const OrganizationIdPage = async ({
     .count()) as { count: string }[];
 
   console.log(currentFileCount);
+  const isPro = await checkSubscription();
 
   return (
     <div className="w-full mb-20">
@@ -42,7 +44,7 @@ const OrganizationIdPage = async ({
       <Separator className="my-4" />
       <div className="px-2 md:px-4">
         <Suspense>
-          <UploadButton count={Number(currentFileCount[0].count)} />
+          <UploadButton count={Number(currentFileCount[0].count)} isPro={isPro} />
           <BoardList organizationId={params.organizationId} />
         </Suspense>
       </div>
