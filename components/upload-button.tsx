@@ -11,6 +11,7 @@ import { MAX_UPLOAD_LIMIT } from "@/constants/uploads";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -151,14 +152,24 @@ const UploadDropzone = ({}) => {
 };
 
 const UploadButton: FC<UploadButtonProps> = ({ count, isPro }) => {
+
   return (
     <>
-      {count < MAX_UPLOAD_LIMIT ? (
-        <UploadDropzone />
+      {isPro || count < MAX_UPLOAD_LIMIT ? (
+        <>
+          <Card className="mb-5">
+            <CardHeader>
+              <CardTitle>{isPro ? "You are on Pro Plan" : "You are on Free Plan"}</CardTitle>
+              <CardDescription>
+                {isPro ? "To manage subscription go to settings" : `You can upload ${MAX_UPLOAD_LIMIT - count} more files`}
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <UploadDropzone />
+        </>
       ) : (
         <>
           <Card className="mb-5">
-            {" "}
             <CardHeader>
               <CardTitle>Limit Crossed For Free Plan</CardTitle>
             </CardHeader>
@@ -166,7 +177,6 @@ const UploadButton: FC<UploadButtonProps> = ({ count, isPro }) => {
               Upgrade to Pro Plan to upload more files.
             </CardContent>
             <CardFooter>
-              {/* <Button>Upgrade</Button> */}
               <SubscriptionButton isPro={isPro} />
             </CardFooter>
           </Card>

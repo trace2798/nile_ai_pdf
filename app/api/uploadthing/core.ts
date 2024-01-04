@@ -3,14 +3,12 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 
-import nile from "@/lib/NileServer";
 import { configureNile } from "@/lib/AuthUtils";
-import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { OrganizationModal } from "@/components/modals/orgs-modal";
-import { NextResponse } from "next/server";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import nile from "@/lib/NileServer";
+import { currentTenantId } from "@/lib/tenent-id";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { cookies } from "next/headers";
 // import { usePathname } from "next/navigation";
 
 type SubscriptionPlan = "FREE" | "PRO" | "ENTERPRISE";
@@ -25,17 +23,7 @@ const middleware = async () => {
   });
   console.log(user);
   if (!user) throw new Error("Unauthorized");
-  // const params = usePathname();
-  // const subscriptionPlan = await getUserSubscriptionPlan({ userId: user.id });
-  const headersList = headers();
-  console.log(headersList);
-  const referer = headersList.get("referer");
-  console.log(referer);
-  if (!referer) {
-    redirect("/");
-  }
-  const parts = referer.split("/");
-  const number = parts[5];
+  const number = await currentTenantId();
   console.log(number);
   const orgId = number;
   return { userInfo: user, orgId };

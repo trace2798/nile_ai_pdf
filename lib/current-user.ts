@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export const currentUser = async () => {
   configureNile(cookies().get("authData"), null);
-  console.log("showing tenants page for user: " + nile.userId);
+  console.log("CurrentUser Lib File: " + nile.userId);
   if (!nile.userId) {
     redirect("/login");
   }

@@ -13,23 +13,15 @@ import { currentUser } from "@/lib/current-user";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import nile from "@/lib/NileServer";
+import { currentTenantId } from "@/lib/tenent-id";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-  //   const { userId, orgId } = auth();
   const user = await currentUser();
   console.log("user: ", user);
   const userId = user.id;
   console.log(userId);
 
-  const headersList = headers();
-  console.log(headersList);
-  const referer = headersList.get("referer");
-  console.log(referer);
-  if (!referer) {
-    redirect("/");
-  }
-  const parts = referer.split("/");
-  const number = parts[5];
+  const number = await currentTenantId();
   console.log(number);
   const orgId = number;
   //   const { orgId } = user;
@@ -84,6 +76,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         ],
         metadata: {
           orgId,
+          userId,
         },
       });
       console.log("New:", stripeSession);

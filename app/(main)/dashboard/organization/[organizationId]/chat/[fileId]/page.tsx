@@ -1,8 +1,9 @@
-import { Chat } from "./_components/chat";
-import nile from "@/lib/NileServer";
 import { configureNile } from "@/lib/AuthUtils";
-import { cookies, headers } from "next/headers";
+import nile from "@/lib/NileServer";
+import { currentTenantId } from "@/lib/tenent-id";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Chat } from "./_components/chat";
 
 interface FileIdPageProps {
   params: {
@@ -16,15 +17,7 @@ const FileIdPage = async ({ params }: FileIdPageProps) => {
   if (!nile.userId) {
     redirect("/");
   }
-  const headersList = headers();
-  console.log(headersList);
-  const referer = headersList.get("referer");
-  console.log(referer);
-  if (!referer) {
-    redirect("/");
-  }
-  const parts = referer.split("/");
-  const number = parts[5];
+  const number = await currentTenantId();
   console.log(number);
   const messages = await nile
     .db("message")

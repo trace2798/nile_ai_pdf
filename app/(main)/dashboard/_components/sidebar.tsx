@@ -104,7 +104,7 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
         {/* <NavItem key={id} organizationId={id} /> */}
       {/* </Accordion> */}
       {/* <Link href={`/dashboard/organization/${params.organizationId}/settings`}>
-        // Settings 
+        // settings 
       </Link> */}
       <NavItem key={id} organizationId={id} />
     </>
