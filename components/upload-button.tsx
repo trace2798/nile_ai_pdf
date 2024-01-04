@@ -24,13 +24,12 @@ interface UploadButtonProps {
   isPro: boolean;
 }
 
-const UploadDropzone = ({}) => {
+const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const router = useRouter();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploadSuceess, setIsUploadSuceess] = useState<boolean>(false);
 
-  const isSubscribed = true;
   const { startUpload } = useUploadThing(
     isSubscribed ? "proPlanUploader" : "freePlanUploader"
   );
@@ -102,7 +101,8 @@ const UploadDropzone = ({}) => {
                   and drop
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  PDF (up to {isSubscribed ? "16" : "4"}MB)
+                  PDF (up to {isSubscribed ? "16" : "4"}MB) and{" "}
+                  {isSubscribed ? "50" : "5"} pages
                 </p>
               </div>
 
@@ -152,35 +152,27 @@ const UploadDropzone = ({}) => {
 };
 
 const UploadButton: FC<UploadButtonProps> = ({ count, isPro }) => {
-
   return (
     <>
-      {isPro || count < MAX_UPLOAD_LIMIT ? (
-        <>
-          <Card className="mb-5">
-            <CardHeader>
-              <CardTitle>{isPro ? "You are on Pro Plan" : "You are on Free Plan"}</CardTitle>
-              <CardDescription>
-                {isPro ? "To manage subscription go to settings" : `You can upload ${MAX_UPLOAD_LIMIT - count} more files`}
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <UploadDropzone />
-        </>
-      ) : (
-        <>
-          <Card className="mb-5">
-            <CardHeader>
-              <CardTitle>Limit Crossed For Free Plan</CardTitle>
-            </CardHeader>
-            <CardContent className="">
-              Upgrade to Pro Plan to upload more files.
-            </CardContent>
-            <CardFooter>
-              <SubscriptionButton isPro={isPro} />
-            </CardFooter>
-          </Card>
-        </>
+      <Card className="mb-5">
+        <CardHeader>
+          <CardTitle>
+            {isPro ? "You are on Pro Plan" : "You are on Free Plan"}
+          </CardTitle>
+          <CardDescription>
+            {isPro
+              ? "To manage subscription go to settings"
+              : `You can upload ${MAX_UPLOAD_LIMIT} files. ${
+                  MAX_UPLOAD_LIMIT - count
+                } Remaining `}
+          </CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <SubscriptionButton isPro={isPro} />
+        </CardFooter>
+      </Card>
+      {(isPro || count < MAX_UPLOAD_LIMIT) && (
+        <UploadDropzone isSubscribed={isPro} />
       )}
     </>
   );

@@ -9,9 +9,9 @@ import { currentTenantId } from "@/lib/tenent-id";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { cookies } from "next/headers";
+import { checkSubscription } from "@/lib/subscription";
 // import { usePathname } from "next/navigation";
 
-type SubscriptionPlan = "FREE" | "PRO" | "ENTERPRISE";
 
 const f = createUploadthing();
 
@@ -26,7 +26,9 @@ const middleware = async () => {
   const number = await currentTenantId();
   console.log(number);
   const orgId = number;
-  return { userInfo: user, orgId };
+  const isPro = await checkSubscription();
+  console.log(isPro);
+  return { userInfo: user, orgId, isPro };
 };
 
 const onUploadComplete = async ({
@@ -41,15 +43,6 @@ const onUploadComplete = async ({
   };
 }) => {
   try {
-    console.log(metadata);
-    console.log(file);
-    // const isFileExist = await nile.db("file").where({
-    //   key: file.key,
-    // });
-
-    // if (isFileExist) return;
-    console.log("1: Uploadthings api");
-
     const response = await fetch(
       `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`
     );
@@ -65,12 +58,15 @@ const onUploadComplete = async ({
     // const { subscriptionPlan } = metadata;
     console.log("CHECKING PAGES");
     console.log(pagesAmt);
-
     // Check if the pages amount exceeds the limit for the subscription plan
-    // const isPageLimitExceeded =
-    // pagesAmt > maxPages[subscriptionPlan as SubscriptionPlan];
-    const isPageLimitExceeded = pagesAmt > 50;
-    console.log(isPageLimitExceeded);
+    const isPro = metadata.isPro;
+
+    // const isPageLimitExceeded = pagesAmt > 50;
+    const maxPageLimit = isPro ? 50 : 5;
+
+    const isPageLimitExceeded = pagesAmt > maxPageLimit;
+    console.log("PAGE CHECK:", isPageLimitExceeded);
+
     if (!isPageLimitExceeded) {
       const createdFile = await nile.db("file").insert({
         tenant_id: metadata.orgId,
@@ -170,15 +166,6 @@ const onUploadComplete = async ({
       return "LIMITEXCEED";
     }
   } catch (err) {
-    // await db.file.update({
-    //   data: {
-    //     uploadStatus: "FAILED",
-    //   },
-    //   where: {
-    //     id: createdFile.id,
-    //   },
-    // });
-    console.log(err);
     return "LIMITEXCEED";
   }
 };

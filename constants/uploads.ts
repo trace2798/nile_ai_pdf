@@ -1,1 +1,1 @@
-export const MAX_UPLOAD_LIMIT = 5;
+export const MAX_UPLOAD_LIMIT = 3;
