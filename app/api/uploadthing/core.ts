@@ -11,8 +11,6 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { cookies } from "next/headers";
 import { checkSubscription } from "@/lib/subscription";
 // import { usePathname } from "next/navigation";
-
-
 const f = createUploadthing();
 
 const middleware = async () => {
@@ -55,7 +53,6 @@ const onUploadComplete = async ({
 
     const pagesAmt = pageLevelDocs.length;
 
-    // const { subscriptionPlan } = metadata;
     console.log("CHECKING PAGES");
     console.log(pagesAmt);
     // Check if the pages amount exceeds the limit for the subscription plan
@@ -65,7 +62,7 @@ const onUploadComplete = async ({
     const maxPageLimit = isPro ? 50 : 5;
 
     const isPageLimitExceeded = pagesAmt > maxPageLimit;
-    console.log("PAGE CHECK:", isPageLimitExceeded);
+    console.log("PAGE CHECK Failed:", isPageLimitExceeded);
 
     if (!isPageLimitExceeded) {
       const createdFile = await nile.db("file").insert({
@@ -159,14 +156,14 @@ const onUploadComplete = async ({
         }
       } catch (err) {
         console.log("error: Error in upserting to database ", err);
-        return "LIMITEXCEED";
+        return "Embedding FAILED";
       }
       return "SUCCESS";
     } else {
-      return "LIMITEXCEED";
+      return "LIMIT EXCEEDED";
     }
   } catch (err) {
-    return "LIMITEXCEED";
+    return "UPLOAD FAILED";
   }
 };
 

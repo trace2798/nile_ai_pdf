@@ -2,22 +2,19 @@
 import { Cloud, File, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
-
+import { SubscriptionButton } from "@/app/(main)/dashboard/organization/[organizationId]/settings/_components/subscription_button";
+import { MAX_UPLOAD_LIMIT } from "@/constants/uploads";
 import { useUploadThing } from "@/lib/uploadthing";
 import Dropzone from "react-dropzone";
 import { toast } from "sonner";
-import { Progress } from "./ui/progress";
-import { MAX_UPLOAD_LIMIT } from "@/constants/uploads";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Button } from "./ui/button";
-import { SubscriptionButton } from "@/app/(main)/dashboard/organization/[organizationId]/settings/_components/subscription_button";
+import { Progress } from "./ui/progress";
 
 interface UploadButtonProps {
   count: number;
@@ -28,13 +25,13 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const router = useRouter();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [isUploadSuceess, setIsUploadSuceess] = useState<boolean>(false);
+  const [isUploadSuccess, setIsUploadSuccess] = useState<boolean>(false);
 
   const { startUpload } = useUploadThing(
     isSubscribed ? "proPlanUploader" : "freePlanUploader"
   );
 
-  if (isUploadSuceess) {
+  if (isUploadSuccess) {
     window.location.reload();
     router.refresh();
   }
@@ -80,8 +77,23 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
 
         clearInterval(progressInterval);
         setUploadProgress(100);
-        toast.success("Upload successful!");
-        setIsUploadSuceess(true);
+       
+        if (res && res[0].serverData === "LIMIT EXCEEDED") {
+          toast.info(
+            "You have exceeded the upload limit."
+          );
+        }
+        if (res[0].serverData === "LIMIT EXCEEDED") {
+          toast.info(
+            "You have exceeded the upload limit for your subscription plan. Please upgrade to a pro plan to continue uploading."
+          );
+        } else {
+          toast.success("Upload successful!");
+          setIsUploadSuccess(true);
+        }
+        console.log(res);
+
+        setIsUploadSuccess(true);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
@@ -164,7 +176,7 @@ const UploadButton: FC<UploadButtonProps> = ({ count, isPro }) => {
               ? "To manage subscription go to settings"
               : `You can upload ${MAX_UPLOAD_LIMIT} files. ${
                   MAX_UPLOAD_LIMIT - count
-                } Remaining `}
+                } Remaining`}
           </CardDescription>
         </CardHeader>
         <CardFooter>
